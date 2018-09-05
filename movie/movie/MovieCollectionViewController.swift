@@ -42,7 +42,7 @@ class MovieCollectionViewController: UICollectionViewController {
                 
                 //Get back to the main queue
                 DispatchQueue.main.async {
-                    self.movies = moviesData.results
+                    self.movies = self.filterMovie(movieResult: moviesData.results)
                     self.collectionView?.reloadData()
                 }
             } catch let jsonError {
@@ -50,6 +50,16 @@ class MovieCollectionViewController: UICollectionViewController {
             }
             
         }.resume()
+    }
+    
+    func filterMovie(movieResult: [Movie]) -> [Movie] {
+        var movies: [Movie] = []
+        for movie in movieResult {
+            if !movie.adult {
+                movies.append(movie)
+            }
+        }
+        return movies
     }
     
     // MARK: UICollectionViewDataSource
@@ -62,30 +72,43 @@ class MovieCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         let movie = movies[indexPath.item]
         
-        displayImage(posterPath: movie.poster_path)
+        let poster:UIImageView = getImage(posterPath: movie.poster_path)
+        cell.contentView.addSubview(poster)
+        
+        let detail:UITextView = createDetail(title: movie.title, rating: movie.vote_average, releaseDate: movie.release_date)
+        cell.contentView.addSubview(detail)
         cell.contentView.tag = indexPath.item
         return cell
     }
 
-    func displayImage(posterPath: String) {
+    func createDetail(title: String, rating: Float, releaseDate: String) -> UITextView {
+        let view:UITextView = UITextView(frame: CGRect(x:0, y:200, width: self.view.bounds.width, height:50))
+        view.text = title + " " + releaseDate + " (" + String(rating) + ")"
+        view.textColor = UIColor.darkText
+        view.tintColor = UIColor.cyan
+        view.textAlignment = NSTextAlignment.center
+        view.adjustsFontForContentSizeCategory = true
+        return view
+    }
+    
+    func getImage(posterPath: String) -> UIImageView {
         let imageUrlString = "https://image.tmdb.org/t/p/w154" + posterPath
         let imageUrl:URL = URL(string: imageUrlString)!
-        
+        let imageData:NSData = NSData(contentsOf: imageUrl)!
+        let imageView = UIImageView(frame: CGRect(x:0, y:0, width: self.view.bounds.width, height:200))
+
         // Start background thread so that image loading does not make app unresponsive
         DispatchQueue.global(qos: .userInitiated).async {
-            
-            let imageData:NSData = NSData(contentsOf: imageUrl)!
-            let imageView = UIImageView(frame: CGRect(x:0, y:0, width:200, height:200))
-            imageView.center = self.view.center
             
             // When from background thread, UI needs to be updated on main_queue
             DispatchQueue.main.async {
                 let image = UIImage(data: imageData as Data)
                 imageView.image = image
                 imageView.contentMode = UIViewContentMode.scaleAspectFit
-                self.view.addSubview(imageView)
             }
         }
+        
+        return imageView
     }
     
     
