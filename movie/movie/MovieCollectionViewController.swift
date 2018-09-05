@@ -17,7 +17,7 @@ class MovieCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.clearsSelectionOnViewWillAppear = false
+        // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -48,7 +48,6 @@ class MovieCollectionViewController: UICollectionViewController {
             } catch let jsonError {
                 print(jsonError)
             }
-            
         }.resume()
     }
     
@@ -70,32 +69,56 @@ class MovieCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-        let movie = movies[indexPath.item]
         
-        let poster:UIImageView = getImage(posterPath: movie.poster_path)
+        clearSubview(subviews: cell.contentView.subviews) // clear subviews
+        
+        let movie = movies[indexPath.item]
+        let width:CGFloat = getWidth()
+        
+        print(width)
+        
+        cell.backgroundColor = UIColor.gray
+        
+        // add poster
+        let poster:UIImageView = getImage(width: width, posterPath: movie.poster_path)
         cell.contentView.addSubview(poster)
         
-        let detail:UITextView = createDetail(title: movie.title, rating: movie.vote_average, releaseDate: movie.release_date)
+        // add label
+        let detail:UILabel = createDetail(width: width, title: movie.title, rating: movie.vote_average, releaseDate: movie.release_date)
         cell.contentView.addSubview(detail)
         cell.contentView.tag = indexPath.item
+        
         return cell
     }
-
-    func createDetail(title: String, rating: Float, releaseDate: String) -> UITextView {
-        let view:UITextView = UITextView(frame: CGRect(x:0, y:200, width: self.view.bounds.width, height:50))
-        view.text = title + " " + releaseDate + " (" + String(rating) + ")"
-        view.textColor = UIColor.darkText
-        view.tintColor = UIColor.cyan
-        view.textAlignment = NSTextAlignment.center
-        view.adjustsFontForContentSizeCategory = true
-        return view
+    
+    func getWidth() -> CGFloat {
+        if UIDevice.current.orientation.isLandscape {
+            return UIScreen.main.bounds.height
+        }
+        
+        return UIScreen.main.bounds.width
     }
     
-    func getImage(posterPath: String) -> UIImageView {
+    func clearSubview(subviews: [UIView]) {
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
+    }
+
+    func createDetail(width: CGFloat, title: String, rating: Float, releaseDate: String) -> UILabel {
+        let label:UILabel = UILabel(frame: CGRect(x:10, y: 107, width: width, height:20))
+        label.text = title + " " + releaseDate + " (" + String(rating) + ")"
+        label.textColor = UIColor.darkText
+        label.textAlignment = NSTextAlignment.left
+        label.adjustsFontForContentSizeCategory = true
+        return label
+    }
+    
+    func getImage(width: CGFloat, posterPath: String) -> UIImageView {
         let imageUrlString = "https://image.tmdb.org/t/p/w154" + posterPath
         let imageUrl:URL = URL(string: imageUrlString)!
         let imageData:NSData = NSData(contentsOf: imageUrl)!
-        let imageView = UIImageView(frame: CGRect(x:0, y:0, width: self.view.bounds.width, height:200))
+        let imageView = UIImageView(frame: CGRect(x:10, y:5, width: width, height:100))
 
         // Start background thread so that image loading does not make app unresponsive
         DispatchQueue.global(qos: .userInitiated).async {
@@ -111,6 +134,12 @@ class MovieCollectionViewController: UICollectionViewController {
         return imageView
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("view will transition")
+        super.viewDidLayoutSubviews()
+        self.collectionViewLayout.invalidateLayout()
+        // self.collectionView!.reloadData()
+    }
     
     // MARK: UICollectionViewDelegate
 
