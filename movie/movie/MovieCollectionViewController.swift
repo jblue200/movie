@@ -13,17 +13,59 @@ private let reuseIdentifier = "movieCell"
 class MovieCollectionViewController: UICollectionViewController {
     
     var movies: [Movie] = []
-
+    @IBOutlet weak var layout: UICollectionViewFlowLayout!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // self.clearsSelectionOnViewWillAppear = false
 
+        NotificationCenter.default.addObserver(self, selector: #selector(self.setItemWidth(_:)), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
+        
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        
         // retrieveMovies
         getMovies()
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        
+        clearSubview(subviews: cell.contentView.subviews) // clear subviews
+        
+        let movie = movies[indexPath.item]
+        
+        if indexPath.item % 2 == 0 {
+            cell.backgroundColor = UIColor.gray
+        } else {
+            cell.backgroundColor = UIColor.white
+        }
+        
+        // add poster
+        let poster:UIImageView = getImage(posterPath: movie.poster_path)
+        cell.contentView.addSubview(poster)
+        
+        // add label
+        let detail:UILabel = createDetail(title: movie.title, rating: movie.vote_average, releaseDate: movie.release_date)
+        cell.contentView.addSubview(detail)
+        cell.contentView.tag = indexPath.item
+        
+        return cell
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewDidLayoutSubviews()
+        self.collectionViewLayout.invalidateLayout()
+        self.collectionView!.reloadData()
     }
     
     func getMovies() {
@@ -48,7 +90,7 @@ class MovieCollectionViewController: UICollectionViewController {
             } catch let jsonError {
                 print(jsonError)
             }
-        }.resume()
+            }.resume()
     }
     
     func filterMovie(movieResult: [Movie]) -> [Movie] {
@@ -60,43 +102,9 @@ class MovieCollectionViewController: UICollectionViewController {
         }
         return movies
     }
-    
-    // MARK: UICollectionViewDataSource
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-        
-        clearSubview(subviews: cell.contentView.subviews) // clear subviews
-        
-        let movie = movies[indexPath.item]
-        let width:CGFloat = getWidth()
-        
-        print(width)
-        
-        cell.backgroundColor = UIColor.gray
-        
-        // add poster
-        let poster:UIImageView = getImage(width: width, posterPath: movie.poster_path)
-        cell.contentView.addSubview(poster)
-        
-        // add label
-        let detail:UILabel = createDetail(width: width, title: movie.title, rating: movie.vote_average, releaseDate: movie.release_date)
-        cell.contentView.addSubview(detail)
-        cell.contentView.tag = indexPath.item
-        
-        return cell
-    }
-    
     func getWidth() -> CGFloat {
-        if UIDevice.current.orientation.isLandscape {
-            return UIScreen.main.bounds.height
-        }
-        
-        return UIScreen.main.bounds.width
+        return UIScreen.main.bounds.size.width
     }
     
     func clearSubview(subviews: [UIView]) {
@@ -105,71 +113,33 @@ class MovieCollectionViewController: UICollectionViewController {
         }
     }
 
-    func createDetail(width: CGFloat, title: String, rating: Float, releaseDate: String) -> UILabel {
-        let label:UILabel = UILabel(frame: CGRect(x:10, y: 107, width: width, height:20))
+    func createDetail(title: String, rating: Float, releaseDate: String) -> UILabel {
+        let label:UILabel = UILabel(frame: CGRect(x:10, y: 107, width: getWidth() - 20, height:20))
         label.text = title + " " + releaseDate + " (" + String(rating) + ")"
         label.textColor = UIColor.darkText
-        label.textAlignment = NSTextAlignment.left
-        label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = NSTextAlignment.center
+        label.adjustsFontSizeToFitWidth = true
         return label
     }
     
-    func getImage(width: CGFloat, posterPath: String) -> UIImageView {
+    func getImage(posterPath: String) -> UIImageView {
         let imageUrlString = "https://image.tmdb.org/t/p/w154" + posterPath
         let imageUrl:URL = URL(string: imageUrlString)!
         let imageData:NSData = NSData(contentsOf: imageUrl)!
-        let imageView = UIImageView(frame: CGRect(x:10, y:5, width: width, height:100))
+        let imageView = UIImageView(frame: CGRect(x:0, y:5, width:getWidth(), height:100))
 
         // Start background thread so that image loading does not make app unresponsive
         DispatchQueue.global(qos: .userInitiated).async {
-            
-            // When from background thread, UI needs to be updated on main_queue
             DispatchQueue.main.async {
                 let image = UIImage(data: imageData as Data)
                 imageView.image = image
                 imageView.contentMode = UIViewContentMode.scaleAspectFit
             }
         }
-        
         return imageView
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("view will transition")
-        super.viewDidLayoutSubviews()
-        self.collectionViewLayout.invalidateLayout()
-        // self.collectionView!.reloadData()
+    @objc func setItemWidth(_ sender: Any) {
+        layout.itemSize = CGSize(width: getWidth(), height: 130)
     }
-    
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }
