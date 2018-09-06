@@ -28,9 +28,6 @@ class MovieCollectionViewController: UICollectionViewController {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        
-        // retrieveMovies
-        getMovies()
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -68,41 +65,6 @@ class MovieCollectionViewController: UICollectionViewController {
         self.collectionView!.reloadData()
     }
     
-    func getMovies() {
-        let urlString = "https://api.themoviedb.org/3/discover/movie?year=2017&api_key=df1b9abfde892d0d5407d6b602b349f2"
-        guard let url = URL(string: urlString) else { return }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            }
-            
-            guard let data = data else { return }
-            do {
-                //Decode retrived data with JSONDecoder and assing type of Movies object
-                let moviesData = try JSONDecoder().decode(Movies.self, from: data)
-                
-                //Get back to the main queue
-                DispatchQueue.main.async {
-                    self.movies = self.filterMovie(movieResult: moviesData.results)
-                    self.collectionView?.reloadData()
-                }
-            } catch let jsonError {
-                print(jsonError)
-            }
-            }.resume()
-    }
-    
-    func filterMovie(movieResult: [Movie]) -> [Movie] {
-        var movies: [Movie] = []
-        for movie in movieResult {
-            if !movie.adult {
-                movies.append(movie)
-            }
-        }
-        return movies
-    }
-
     func getWidth() -> CGFloat {
         return UIScreen.main.bounds.size.width
     }
