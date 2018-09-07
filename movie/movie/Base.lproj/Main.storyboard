@@ -18,15 +18,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KPW-Jr-SGO">
-                                <rect key="frame" x="135.42731277531561" y="317.58700440529537" width="100.99999999999989" height="35.000000000000057"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KPW-Jr-SGO">
+                                <rect key="frame" x="20" y="40" width="335" height="607"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="KPW-Jr-SGO" firstAttribute="leading" secondItem="rAX-4f-fZh" secondAttribute="leading" constant="20" id="9NV-4Z-sE2"/>
+                            <constraint firstItem="rAX-4f-fZh" firstAttribute="trailing" secondItem="KPW-Jr-SGO" secondAttribute="trailing" constant="20" id="XRd-o7-Ndm"/>
+                            <constraint firstItem="rAX-4f-fZh" firstAttribute="bottom" secondItem="KPW-Jr-SGO" secondAttribute="bottom" constant="20" id="lSC-DY-MEb"/>
+                            <constraint firstItem="KPW-Jr-SGO" firstAttribute="top" secondItem="rAX-4f-fZh" secondAttribute="top" constant="20" id="oyb-86-5e9"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="rAX-4f-fZh"/>
                     </view>
                     <connections>

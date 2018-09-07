@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE56A24D2142B39300B36BF6 /* TMDBMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE56A24C2142B39300B36BF6 /* TMDBMovie.swift */; };
 		CE9D6F79213F0FE100819D70 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9D6F78213F0FE100819D70 /* AppDelegate.swift */; };
 		CE9D6F7E213F0FE100819D70 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE9D6F7C213F0FE100819D70 /* Main.storyboard */; };
 		CE9D6F81213F0FE100819D70 /* movie.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE9D6F7F213F0FE100819D70 /* movie.xcdatamodeld */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE56A24C2142B39300B36BF6 /* TMDBMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovie.swift; sourceTree = "<group>"; };
 		CE9D6F75213F0FE100819D70 /* movie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE9D6F78213F0FE100819D70 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE9D6F7D213F0FE100819D70 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				CE9D6F78213F0FE100819D70 /* AppDelegate.swift */,
 				CE9D6F8D213F1FFE00819D70 /* Movies.swift */,
 				CEC14B652141C8A4001111E1 /* Movie.swift */,
+				CE56A24C2142B39300B36BF6 /* TMDBMovie.swift */,
 				CE9D6F8F213F232100819D70 /* MovieCollectionViewController.swift */,
 				CEC14B632141C39B001111E1 /* ViewController.swift */,
 				CE9D6F7C213F0FE100819D70 /* Main.storyboard */,
@@ -143,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE56A24D2142B39300B36BF6 /* TMDBMovie.swift in Sources */,
 				CEC14B642141C39B001111E1 /* ViewController.swift in Sources */,
 				CE9D6F79213F0FE100819D70 /* AppDelegate.swift in Sources */,
 				CEC14B662141C8A4001111E1 /* Movie.swift in Sources */,
