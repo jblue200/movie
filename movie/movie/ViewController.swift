@@ -14,13 +14,16 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        try? tmdb.getCurrentPage()
-        self.performSegue(withIdentifier: "movieIndentifier", sender: tmdb.movies)
+        tmdb.getPage(completion: displayMovie)
+    }
+    
+    func displayMovie() {
+        self.performSegue(withIdentifier: "movieIndentifier", sender: tmdb)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let movieVC = segue.destination as? MovieCollectionViewController {
-            movieVC.movies = sender as! [Movie]
+            movieVC.tmdb = sender as! TMDBMovie
         }
     }
 }

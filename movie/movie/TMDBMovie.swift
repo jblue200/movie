@@ -22,8 +22,10 @@ class TMDBMovie {
         totalPage = 0
     }
     
-    func getMovies(page: Int) {
-        guard let url = URL(string: getUrl(page: page)) else { return }
+    func getMovies(completion: @escaping (() -> Void)) {
+        guard let url = URL(string: getUrl()) else { return }
+        
+        print(url.absoluteURL)
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
@@ -38,8 +40,7 @@ class TMDBMovie {
                 //Get back to the main queue
                 DispatchQueue.main.async {
                     self.addMovie(movieResult: moviesData.results)
-                    // self.performSegue(withIdentifier: "movieIndentifier", sender: self.movies)
-                    
+                    completion()
                 }
             } catch let jsonError {
                 print(jsonError)
@@ -47,20 +48,31 @@ class TMDBMovie {
         }.resume()
     }
 
-    // for refresh
-    func getCurrentPage() {
-        getMovies(page: currentPage)
+    // next page
+    func getNextPage(completion: @escaping (() -> Void)) {
+        currentPage += 1
+        getPage(completion: completion)
+    }
+    
+    func refreshPage(completion: @escaping (() -> Void)) {
+        print("refresh page")
+        currentPage = 0
+        movies = []
+        getPage(completion: completion)
     }
 
-    // next page
-    func getNextPage() {
-        currentPage += 1
-        getMovies(page: currentPage)
+    func getPage(completion: @escaping (() -> Void)) {
+        getMovies(completion: completion)
     }
     
     // format url with page
-    func getUrl(page: Int) -> String {
-        let query:String = "year=2017&api_key=df1b9abfde892d0d5407d6b602b349f2&page=\(String(page))"
+    func getUrl() -> String {
+        var query:String = "year=2017&api_key=df1b9abfde892d0d5407d6b602b349f2"
+        
+        if currentPage > 0 {
+            query += "&page=\(String(currentPage))"
+        }
+        
         return "\(baseUrl)?\(query)"
     }
     

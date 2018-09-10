@@ -9,10 +9,12 @@
 import UIKit
 
 private let reuseIdentifier = "movieCell"
+private let refreshControl = UIRefreshControl()
 
 class MovieCollectionViewController: UICollectionViewController {
     
-    var movies: [Movie] = []
+    var tmdb:TMDBMovie = TMDBMovie()
+    
     @IBOutlet weak var layout: UICollectionViewFlowLayout!
     
     override func viewDidLoad() {
@@ -24,14 +26,15 @@ class MovieCollectionViewController: UICollectionViewController {
         
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        
+        addRefreshControl()
+
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
+        return tmdb.movies.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -39,46 +42,58 @@ class MovieCollectionViewController: UICollectionViewController {
         
         clearSubview(subviews: cell.contentView.subviews) // clear subviews
         
-        let movie = movies[indexPath.item]
+        let movie = tmdb.movies[indexPath.item]
         
         if indexPath.item % 2 == 0 {
-            cell.backgroundColor = UIColor.gray
+            cell.backgroundColor = UIColor(red:0.25, green:0.5, blue:1, alpha:0.1)
         } else {
             cell.backgroundColor = UIColor.white
         }
-        
+
         // add poster
         let poster:UIImageView = getImage(posterPath: movie.poster_path)
         cell.contentView.addSubview(poster)
         
         // add label
-        let detail:UILabel = createDetail(title: movie.title, rating: movie.vote_average, releaseDate: movie.release_date)
+        let detail:UILabel = createDetail(index: indexPath.item, title: movie.title, rating: movie.vote_average, releaseDate: movie.release_date)
         cell.contentView.addSubview(detail)
         cell.contentView.tag = indexPath.item
         
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        // check to see if it is the last row
+        if indexPath.row == tmdb.movies.count - 1 {
+            tmdb.getNextPage(completion: updateLayout)
+        }
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateLayout()
+    }
+    
+    func updateLayout() {
         super.viewDidLayoutSubviews()
         self.collectionViewLayout.invalidateLayout()
         self.collectionView!.reloadData()
     }
-    
-    func getWidth() -> CGFloat {
-        return UIScreen.main.bounds.size.width
-    }
-    
+
     func clearSubview(subviews: [UIView]) {
         for subview in subviews {
             subview.removeFromSuperview()
         }
     }
+    
+    func getWidth() -> CGFloat {
+        return UIScreen.main.bounds.size.width
+    }
 
-    func createDetail(title: String, rating: Float, releaseDate: String) -> UILabel {
-        let label:UILabel = UILabel(frame: CGRect(x:10, y: 107, width: getWidth() - 20, height:20))
+    func createDetail(index: Int, title: String, rating: Float, releaseDate: String) -> UILabel {
+        let label:UILabel = UILabel(frame: CGRect(x:10, y: 110, width: getWidth() - 20, height:20))
         label.text = title + " " + releaseDate + " (" + String(rating) + ")"
         label.textColor = UIColor.darkText
+        label.font = UIFont(name: "System", size: 17.0)
         label.textAlignment = NSTextAlignment.center
         label.adjustsFontSizeToFitWidth = true
         return label
@@ -88,7 +103,7 @@ class MovieCollectionViewController: UICollectionViewController {
         let imageUrlString = "https://image.tmdb.org/t/p/w154" + posterPath
         let imageUrl:URL = URL(string: imageUrlString)!
         let imageData:NSData = NSData(contentsOf: imageUrl)!
-        let imageView = UIImageView(frame: CGRect(x:0, y:5, width:getWidth(), height:100))
+        let imageView = UIImageView(frame: CGRect(x:0, y:8, width:getWidth(), height:100))
 
         // Start background thread so that image loading does not make app unresponsive
         DispatchQueue.global(qos: .userInitiated).async {
@@ -101,7 +116,33 @@ class MovieCollectionViewController: UICollectionViewController {
         return imageView
     }
     
+    func addRefreshControl() {
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor(red:0.25, green:0.72, blue:1, alpha:1.0)]
+        
+        if #available(iOS 10.0, *) {
+            collectionView!.refreshControl = refreshControl
+        } else {
+            collectionView!.addSubview(refreshControl)
+        }
+        
+        refreshControl.addTarget(self, action: #selector(self.refreshPage(_:)), for: .valueChanged)
+        refreshControl.tintColor = UIColor(red:0.25, green:0.72, blue:1, alpha:0.4)
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Movies ...", attributes: attributes)
+    }
+    
+    func refreshCompleted() {
+        self.updateLayout()
+        DispatchQueue.main.async {
+            self.collectionView!.refreshControl?.endRefreshing()
+        }
+    }
+    
     @objc func setItemWidth(_ sender: Any) {
         layout.itemSize = CGSize(width: getWidth(), height: 130)
     }
+    
+    @objc func refreshPage(_ sender: Any) {
+        tmdb.refreshPage(completion: refreshCompleted)
+    }
+    
 }
