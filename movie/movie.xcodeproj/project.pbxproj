@@ -16,6 +16,8 @@
 		CE9D6F90213F232100819D70 /* MovieCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9D6F8F213F232100819D70 /* MovieCollectionViewController.swift */; };
 		CEC14B642141C39B001111E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC14B632141C39B001111E1 /* ViewController.swift */; };
 		CEC14B662141C8A4001111E1 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC14B652141C8A4001111E1 /* Movie.swift */; };
+		CEC4BDFC2146F88200369CF0 /* ConnectivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4BDFB2146F88200369CF0 /* ConnectivityViewController.swift */; };
+		CEC4BE00214700F700369CF0 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4BDFF214700F700369CF0 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		CE9D6F8F213F232100819D70 /* MovieCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewController.swift; sourceTree = "<group>"; };
 		CEC14B632141C39B001111E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CEC14B652141C8A4001111E1 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		CEC4BDFB2146F88200369CF0 /* ConnectivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityViewController.swift; sourceTree = "<group>"; };
+		CEC4BDFF214700F700369CF0 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +71,9 @@
 				CEC14B652141C8A4001111E1 /* Movie.swift */,
 				CE56A24C2142B39300B36BF6 /* TMDBMovie.swift */,
 				CE9D6F8F213F232100819D70 /* MovieCollectionViewController.swift */,
+				CEC4BDFB2146F88200369CF0 /* ConnectivityViewController.swift */,
 				CEC14B632141C39B001111E1 /* ViewController.swift */,
+				CEC4BDFF214700F700369CF0 /* NetworkManager.swift */,
 				CE9D6F7C213F0FE100819D70 /* Main.storyboard */,
 				CE9D6F82213F0FE200819D70 /* Assets.xcassets */,
 				CE9D6F87213F0FE200819D70 /* Info.plist */,
@@ -148,6 +154,8 @@
 			files = (
 				CE56A24D2142B39300B36BF6 /* TMDBMovie.swift in Sources */,
 				CEC14B642141C39B001111E1 /* ViewController.swift in Sources */,
+				CEC4BE00214700F700369CF0 /* NetworkManager.swift in Sources */,
+				CEC4BDFC2146F88200369CF0 /* ConnectivityViewController.swift in Sources */,
 				CE9D6F79213F0FE100819D70 /* AppDelegate.swift in Sources */,
 				CEC14B662141C8A4001111E1 /* Movie.swift in Sources */,
 				CE9D6F90213F232100819D70 /* MovieCollectionViewController.swift in Sources */,

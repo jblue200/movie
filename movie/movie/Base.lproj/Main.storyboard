@@ -10,6 +10,52 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Offline-->
+        <scene sceneID="5ek-nx-pfB">
+            <objects>
+                <viewController title="Offline" id="hta-db-527" customClass="ConnectivityViewController" customModule="movie" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HRQ-FX-jfY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are offline, connect to the internet." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gjw-as-sfg">
+                                <rect key="frame" x="20" y="202" width="335" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😭" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2a0-il-qqR">
+                                <rect key="frame" x="20" y="65" width="335" height="87"/>
+                                <fontDescription key="fontDescription" name="AppleColorEmoji" family="Apple Color Emoji" pointSize="66"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZN-rF-swM">
+                                <rect key="frame" x="155" y="224" width="72" height="40"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                                <state key="normal" title="Setting"/>
+                                <connections>
+                                    <action selector="buttonTapped:" destination="hta-db-527" eventType="touchUpInside" id="un4-g7-wPs"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Gjw-as-sfg" firstAttribute="top" secondItem="2a0-il-qqR" secondAttribute="bottom" constant="50" id="6TR-Cw-zig"/>
+                            <constraint firstItem="BZN-rF-swM" firstAttribute="top" secondItem="Gjw-as-sfg" secondAttribute="bottom" constant="34" id="GNo-O6-El0"/>
+                            <constraint firstItem="2a0-il-qqR" firstAttribute="top" secondItem="E3d-NY-dq9" secondAttribute="top" constant="45" id="VFk-k5-bUK"/>
+                            <constraint firstItem="2a0-il-qqR" firstAttribute="leading" secondItem="E3d-NY-dq9" secondAttribute="leading" constant="20" id="azL-iP-dMJ"/>
+                            <constraint firstItem="E3d-NY-dq9" firstAttribute="trailing" secondItem="Gjw-as-sfg" secondAttribute="trailing" constant="20" id="iW7-dp-c0b"/>
+                            <constraint firstItem="Gjw-as-sfg" firstAttribute="leading" secondItem="E3d-NY-dq9" secondAttribute="leading" constant="20" id="qE0-SN-MjO"/>
+                            <constraint firstItem="E3d-NY-dq9" firstAttribute="trailing" secondItem="2a0-il-qqR" secondAttribute="trailing" constant="20" id="tRa-MG-4O9"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="E3d-NY-dq9"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LVF-ux-MPy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="119" y="-85"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="391-7C-cAs">
             <objects>
@@ -35,7 +81,8 @@
                         <viewLayoutGuide key="safeArea" id="rAX-4f-fZh"/>
                     </view>
                     <connections>
-                        <segue destination="oGa-9i-cP6" kind="show" identifier="movieIndentifier" id="rmo-2t-hAi"/>
+                        <segue destination="oGa-9i-cP6" kind="showDetail" identifier="movieIndentifier" id="rmo-2t-hAi"/>
+                        <segue destination="hta-db-527" kind="show" identifier="loadingToConnectivity" id="NSQ-qS-wax"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3g6-Au-1XT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -78,7 +125,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dOd-iS-JJe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="125.59999999999999" y="245.12743628185908"/>
+            <point key="canvasLocation" x="137" y="589"/>
         </scene>
     </scenes>
 </document>

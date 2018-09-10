@@ -14,7 +14,6 @@ private let refreshControl = UIRefreshControl()
 class MovieCollectionViewController: UICollectionViewController {
     
     var tmdb:TMDBMovie = TMDBMovie()
-    
     @IBOutlet weak var layout: UICollectionViewFlowLayout!
     
     override func viewDidLoad() {
