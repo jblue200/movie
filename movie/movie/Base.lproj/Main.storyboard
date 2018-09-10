@@ -30,8 +30,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZN-rF-swM">
-                                <rect key="frame" x="155" y="224" width="72" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZN-rF-swM">
+                                <rect key="frame" x="155" y="257" width="72" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <state key="normal" title="Setting"/>
                                 <connections>
@@ -41,8 +41,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="BZN-rF-swM" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="HRQ-FX-jfY" secondAttribute="leading" constant="20" symbolic="YES" id="2G8-0b-qbH"/>
                             <constraint firstItem="Gjw-as-sfg" firstAttribute="top" secondItem="2a0-il-qqR" secondAttribute="bottom" constant="50" id="6TR-Cw-zig"/>
                             <constraint firstItem="BZN-rF-swM" firstAttribute="top" secondItem="Gjw-as-sfg" secondAttribute="bottom" constant="34" id="GNo-O6-El0"/>
+                            <constraint firstAttribute="trailing" secondItem="BZN-rF-swM" secondAttribute="trailing" constant="148" id="Svh-AL-jwO"/>
                             <constraint firstItem="2a0-il-qqR" firstAttribute="top" secondItem="E3d-NY-dq9" secondAttribute="top" constant="45" id="VFk-k5-bUK"/>
                             <constraint firstItem="2a0-il-qqR" firstAttribute="leading" secondItem="E3d-NY-dq9" secondAttribute="leading" constant="20" id="azL-iP-dMJ"/>
                             <constraint firstItem="E3d-NY-dq9" firstAttribute="trailing" secondItem="Gjw-as-sfg" secondAttribute="trailing" constant="20" id="iW7-dp-c0b"/>

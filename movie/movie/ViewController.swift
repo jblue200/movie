@@ -15,7 +15,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         if networkManager.isConnected() {
             tmdb.getPage(completion: displayMovie)
         }
@@ -33,13 +35,13 @@ class ViewController: UIViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let movieVC = segue.destination as? MovieCollectionViewController {
-            movieVC.tmdb = sender as! TMDBMovie
+        print("prepare")
+        if let connectivityVC = segue.destination as? ConnectivityViewController {
+            connectivityVC.tmdb = sender as! TMDBMovie
         }
         
-        if let connectivityVC = segue.destination as? ConnectivityViewController {
-            print("connectivityVC")
-            connectivityVC.tmdb = sender as! TMDBMovie
+        if let movieVC = segue.destination as? MovieCollectionViewController {
+            movieVC.tmdb = sender as! TMDBMovie
         }
     }
 }
