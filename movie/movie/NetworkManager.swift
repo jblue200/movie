@@ -9,8 +9,10 @@
 import Foundation
 import SystemConfiguration
 
-class NetworkManager: NSObject {
+class NetworkManager {
     
+    static let shared = NetworkManager()
+        
     func isConnected() -> Bool {
         var address = sockaddr_in()
         address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)

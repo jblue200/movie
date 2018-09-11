@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     var tmdb: TMDBMovie = TMDBMovie()
-    var networkManager: NetworkManager = NetworkManager()
+    var networkManager: NetworkManager = NetworkManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,21 +27,21 @@ class ViewController: UIViewController {
     }
     
     func displayMovie() {
-        self.performSegue(withIdentifier: "movieIndentifier", sender: tmdb)
+        self.performSegue(withIdentifier: "movieIndentifier", sender: self)
     }
     
     func displayConnectivity() {
-        self.performSegue(withIdentifier: "loadingToConnectivity", sender: tmdb)
+        self.performSegue(withIdentifier: "loadingToConnectivity", sender: self)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("prepare")
         if let connectivityVC = segue.destination as? ConnectivityViewController {
-            connectivityVC.tmdb = sender as! TMDBMovie
+            connectivityVC.networkManager = self.networkManager
         }
         
         if let movieVC = segue.destination as? MovieCollectionViewController {
-            movieVC.tmdb = sender as! TMDBMovie
+            movieVC.tmdb = self.tmdb
+            movieVC.networkManager = self.networkManager
         }
     }
 }

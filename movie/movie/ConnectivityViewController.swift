@@ -10,25 +10,18 @@ import UIKit
 
 class ConnectivityViewController: UIViewController {
 
-    var tmdb:TMDBMovie = TMDBMovie()
+    var networkManager: NetworkManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("showing connectivity view controller")
     }
 
     @IBAction func buttonTapped(_ sender: Any) {
-        let scheme:String = UIApplicationOpenSettingsURLString
-        if let url = URL(string: scheme) {
+        if let url = URL(string:"App-Prefs:root=WIFI") {
             if #available(iOS 10, *) {
-                UIApplication.shared.open(url, options: [:],
-                                          completionHandler: {
-                                            (success) in
-                                            print("Open \(scheme): \(success)")
-                })
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
-                let success = UIApplication.shared.openURL(url)
-                print("Open \(scheme): \(success)")
+                UIApplication.shared.openURL(url)
             }
         }
     }

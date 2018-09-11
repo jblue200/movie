@@ -18,6 +18,7 @@
 		CEC14B662141C8A4001111E1 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC14B652141C8A4001111E1 /* Movie.swift */; };
 		CEC4BDFC2146F88200369CF0 /* ConnectivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4BDFB2146F88200369CF0 /* ConnectivityViewController.swift */; };
 		CEC4BE00214700F700369CF0 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4BDFF214700F700369CF0 /* NetworkManager.swift */; };
+		CEC85A3E2148219400F300F1 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC85A3D2148219400F300F1 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		CEC14B652141C8A4001111E1 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		CEC4BDFB2146F88200369CF0 /* ConnectivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityViewController.swift; sourceTree = "<group>"; };
 		CEC4BDFF214700F700369CF0 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		CEC85A3D2148219400F300F1 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				CE56A24C2142B39300B36BF6 /* TMDBMovie.swift */,
 				CE9D6F8F213F232100819D70 /* MovieCollectionViewController.swift */,
 				CEC4BDFB2146F88200369CF0 /* ConnectivityViewController.swift */,
+				CEC85A3D2148219400F300F1 /* DetailViewController.swift */,
 				CEC14B632141C39B001111E1 /* ViewController.swift */,
 				CEC4BDFF214700F700369CF0 /* NetworkManager.swift */,
 				CE9D6F7C213F0FE100819D70 /* Main.storyboard */,
@@ -159,6 +162,7 @@
 				CE9D6F79213F0FE100819D70 /* AppDelegate.swift in Sources */,
 				CEC14B662141C8A4001111E1 /* Movie.swift in Sources */,
 				CE9D6F90213F232100819D70 /* MovieCollectionViewController.swift in Sources */,
+				CEC85A3E2148219400F300F1 /* DetailViewController.swift in Sources */,
 				CE9D6F8E213F1FFE00819D70 /* Movies.swift in Sources */,
 				CE9D6F81213F0FE100819D70 /* movie.xcdatamodeld in Sources */,
 			);

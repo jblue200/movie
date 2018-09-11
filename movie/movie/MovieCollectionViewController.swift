@@ -13,7 +13,8 @@ private let refreshControl = UIRefreshControl()
 
 class MovieCollectionViewController: UICollectionViewController {
     
-    var tmdb:TMDBMovie = TMDBMovie()
+    var tmdb:TMDBMovie!
+    var networkManager:NetworkManager!
     @IBOutlet weak var layout: UICollectionViewFlowLayout!
     
     override func viewDidLoad() {
@@ -58,12 +59,16 @@ class MovieCollectionViewController: UICollectionViewController {
         cell.contentView.addSubview(detail)
         cell.contentView.tag = indexPath.item
         
+        let gesture = MyTapGesture.init(target: self, action: #selector(self.displayDetailPage))
+        gesture.index = indexPath.item
+        cell.contentView.addGestureRecognizer(gesture)
+        
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         // check to see if it is the last row
-        if indexPath.row == tmdb.movies.count - 1 {
+        if indexPath.row == tmdb.movies.count - 1 && networkManager.isConnected() {
             tmdb.getNextPage(completion: updateLayout)
         }
     }
@@ -101,15 +106,16 @@ class MovieCollectionViewController: UICollectionViewController {
     func getImage(posterPath: String) -> UIImageView {
         let imageUrlString = "https://image.tmdb.org/t/p/w154" + posterPath
         let imageUrl:URL = URL(string: imageUrlString)!
-        let imageData:NSData = NSData(contentsOf: imageUrl)!
         let imageView = UIImageView(frame: CGRect(x:0, y:8, width:getWidth(), height:100))
-
-        // Start background thread so that image loading does not make app unresponsive
-        DispatchQueue.global(qos: .userInitiated).async {
-            DispatchQueue.main.async {
-                let image = UIImage(data: imageData as Data)
-                imageView.image = image
-                imageView.contentMode = UIViewContentMode.scaleAspectFit
+        
+        if let imageData:NSData = NSData(contentsOf: imageUrl) {
+            // Start background thread so that image loading does not make app unresponsive
+            DispatchQueue.global(qos: .userInitiated).async {
+                DispatchQueue.main.async {
+                    let image = UIImage(data: imageData as Data)
+                    imageView.image = image
+                    imageView.contentMode = UIViewContentMode.scaleAspectFit
+                }
             }
         }
         return imageView
@@ -141,7 +147,31 @@ class MovieCollectionViewController: UICollectionViewController {
     }
     
     @objc func refreshPage(_ sender: Any) {
-        tmdb.refreshPage(completion: refreshCompleted)
+        if networkManager.isConnected() {
+            tmdb.refreshPage(completion: refreshCompleted)
+        } else {
+            self.performSegue(withIdentifier: "movieToConnectivity", sender: self)
+        }
     }
     
+    @objc func displayDetailPage(sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            self.performSegue(withIdentifier: "movieToDetail", sender: sender)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let connectivityVC = segue.destination as? ConnectivityViewController {
+            connectivityVC.networkManager = self.networkManager
+        }
+        
+        if let detailVC = segue.destination as? DetailViewController {
+            // detailVC.movie = tmdb.movies[sender.contentView.tag]
+        }
+    }
+    
+}
+
+class MyTapGesture: UITapGestureRecognizer {
+    var index: Int = 0
 }
