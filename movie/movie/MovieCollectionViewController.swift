@@ -16,6 +16,7 @@ class MovieCollectionViewController: UICollectionViewController {
     var tmdb: TMDBMovie = TMDBMovie()
     var networkManager: NetworkManager = NetworkManager.shared
     var loadingLabel: UILabel!
+    var connected: Bool = true
     @IBOutlet weak var layout: UICollectionViewFlowLayout!
     
     override func viewDidLoad() {
@@ -34,7 +35,7 @@ class MovieCollectionViewController: UICollectionViewController {
             tmdb.getPage(completion: refreshCompleted)
         }
         else {
-            self.performSegue(withIdentifier: "movieToConnectivity", sender: self)
+            handleOffline()
         }
 
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -42,8 +43,28 @@ class MovieCollectionViewController: UICollectionViewController {
         layout.minimumInteritemSpacing = 0
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if isAppAlreadyLaunchedOnce() && !connected {
+            if networkManager.isConnected() {
+                connected = true
+                tmdb.getPage(completion: refreshCompleted)
+            }
+        }
+    }
+
+    func isAppAlreadyLaunchedOnce() -> Bool {
+        let defaults = UserDefaults.standard
+
+        if defaults.string(forKey: "isAppAlreadyLaunchedOnce") != nil {
+            print("App already launched")
+            return true
+        }
+
+        defaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+        return false
+    }
+    
     func addLoadingLabel() {
-        print("add loading label")
         loadingLabel = UILabel(frame: CGRect(x:10, y: 110, width: getWidth() - 20, height:20))
         loadingLabel.text = "Loading..."
         loadingLabel.textColor = UIColor.blue
@@ -95,6 +116,11 @@ class MovieCollectionViewController: UICollectionViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         updateLayout()
+    }
+    
+    func handleOffline() {
+        connected = false;
+        self.performSegue(withIdentifier: "movieToConnectivity", sender: self)
     }
     
     func updateLayout() {
@@ -158,6 +184,10 @@ class MovieCollectionViewController: UICollectionViewController {
     func refreshCompleted() {
         loadingLabel.isHidden = true
         self.updateLayout()
+        endCollectionRefresh()
+    }
+    
+    func endCollectionRefresh() {
         DispatchQueue.main.async {
             self.collectionView!.refreshControl?.endRefreshing()
         }
@@ -171,7 +201,7 @@ class MovieCollectionViewController: UICollectionViewController {
         if networkManager.isConnected() {
             tmdb.refreshPage(completion: refreshCompleted)
         } else {
-            self.performSegue(withIdentifier: "movieToConnectivity", sender: self)
+            handleOffline()
         }
     }
     
@@ -191,7 +221,6 @@ class MovieCollectionViewController: UICollectionViewController {
             detailVC.movie = tmdb.movies[gesture.index]
         }
     }
-    
 }
 
 class MyTapGesture: UITapGestureRecognizer {
