@@ -29,12 +29,12 @@ class DetailViewController: UIViewController {
         print(movie.backdrop_path)
         name.text = movie.title
         year.text = movie.release_date
-        rating.text = String(movie.vote_average)
+        rating.text = "rating: \(String(movie.vote_average))"
         detail.text = movie.overview
     }
 
     func displayImage() {
-        let imageUrlString = "https://image.tmdb.org/t/p/w154" + movie.poster_path
+        let imageUrlString = "https://image.tmdb.org/t/p/w154" + movie.backdrop_path // .poster_path
         let imageUrl:URL = URL(string: imageUrlString)!
         
         if let imageData:NSData = NSData(contentsOf: imageUrl) {

@@ -13,12 +13,14 @@ private let refreshControl = UIRefreshControl()
 
 class MovieCollectionViewController: UICollectionViewController {
     
-    var tmdb:TMDBMovie!
-    var networkManager:NetworkManager!
+    var tmdb: TMDBMovie = TMDBMovie()
+    var networkManager: NetworkManager = NetworkManager.shared
+    var loadingLabel: UILabel!
     @IBOutlet weak var layout: UICollectionViewFlowLayout!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addLoadingLabel()
 
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -27,10 +29,28 @@ class MovieCollectionViewController: UICollectionViewController {
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         addRefreshControl()
+        
+        if networkManager.isConnected() {
+            tmdb.getPage(completion: refreshCompleted)
+        }
+        else {
+            self.performSegue(withIdentifier: "movieToConnectivity", sender: self)
+        }
 
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
+    }
+    
+    func addLoadingLabel() {
+        print("add loading label")
+        loadingLabel = UILabel(frame: CGRect(x:10, y: 110, width: getWidth() - 20, height:20))
+        loadingLabel.text = "Loading..."
+        loadingLabel.textColor = UIColor.blue
+        loadingLabel.font = UIFont(name: "System", size: 17.0)
+        loadingLabel.textAlignment = NSTextAlignment.center
+        loadingLabel.adjustsFontSizeToFitWidth = true
+        collectionView!.addSubview(self.loadingLabel)
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -136,6 +156,7 @@ class MovieCollectionViewController: UICollectionViewController {
     }
     
     func refreshCompleted() {
+        loadingLabel.isHidden = true
         self.updateLayout()
         DispatchQueue.main.async {
             self.collectionView!.refreshControl?.endRefreshing()
@@ -154,7 +175,7 @@ class MovieCollectionViewController: UICollectionViewController {
         }
     }
     
-    @objc func displayDetailPage(sender: UITapGestureRecognizer) {
+    @objc func displayDetailPage(sender: MyTapGesture) {
         if sender.state == .ended {
             self.performSegue(withIdentifier: "movieToDetail", sender: sender)
         }
@@ -166,7 +187,8 @@ class MovieCollectionViewController: UICollectionViewController {
         }
         
         if let detailVC = segue.destination as? DetailViewController {
-            // detailVC.movie = tmdb.movies[sender.contentView.tag]
+            let gesture = sender as! MyTapGesture
+            detailVC.movie = tmdb.movies[gesture.index]
         }
     }
     

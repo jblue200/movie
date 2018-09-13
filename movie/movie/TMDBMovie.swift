@@ -18,7 +18,7 @@ class TMDBMovie {
     init() {
         movies = []
         baseUrl = "https://api.themoviedb.org/3/discover/movie"
-        currentPage = 0
+        currentPage = 1
         totalPage = 0
     }
     
@@ -56,7 +56,7 @@ class TMDBMovie {
     
     func refreshPage(completion: @escaping (() -> Void)) {
         print("refresh page")
-        currentPage = 0
+        currentPage = 1
         movies = []
         getPage(completion: completion)
     }
@@ -67,13 +67,7 @@ class TMDBMovie {
     
     // format url with page
     func getUrl() -> String {
-        var query:String = "year=2017&api_key=df1b9abfde892d0d5407d6b602b349f2"
-        
-        if currentPage > 0 {
-            query += "&page=\(String(currentPage))"
-        }
-        
-        return "\(baseUrl)?\(query)"
+        return "\(baseUrl)?year=2017&api_key=df1b9abfde892d0d5407d6b602b349f2&page=\(String(currentPage))"
     }
     
     func addMovie( movieResult: [Movie]) {
